@@ -22,7 +22,6 @@
 
 .row .center:first-child{
   border-right: 1px dashed  black;
-  text-align: center !important;
 }
 
 .center{

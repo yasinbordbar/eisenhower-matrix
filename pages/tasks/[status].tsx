@@ -1,26 +1,22 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
-import { TaskStatus } from "../../types/indes";
 import Task from "../../components/Task";
+import AddTask from "../../components/AddTask";
+import axios from "axios";
+import useSWR from "swr";
+
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const Status = () => {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "test",
-      status: TaskStatus.UrgentImportant,
-    },
-    {
-      id: 2,
-      title: "test",
-      status: TaskStatus.UrgentImportant,
-    },
-  ]);
   const router = useRouter();
-
   const { status } = router.query;
+
+  const { data: tasks, error } = useSWR(
+    `http://localhost:3000/tasks/${status}`,
+    fetcher
+  );
+  console.log(tasks);
 
   const getTitle = () => {
     if (typeof status === "string") {
@@ -37,6 +33,7 @@ const Status = () => {
         <meta name="description" content={`${status} tasks`} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <AddTask status={status} />
 
       <div className="text-center">
         <Link href="/">
@@ -46,7 +43,7 @@ const Status = () => {
 
       <p className="text-center bold font-30">{getTitle()}</p>
 
-      {tasks.map((task: any) => (
+      {tasks?.map((task: any) => (
         <Task key={task.id} title={task.title} />
       ))}
     </div>

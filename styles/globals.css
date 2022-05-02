@@ -29,13 +29,12 @@ button{
 }
 
 .btn {
-  height: 80px;
-  line-height: 80px;
-  width: 80px;
-  font-size: 2em;
+  font-size: 1.5em;
+
   font-weight: bold;
   border-radius: 50%;
   background-color: #75a9ee;
+  margin: 10px;
   color: white;
   text-align: center;
   cursor: pointer;
@@ -73,4 +72,33 @@ button{
   background: #ffffff;
   border-radius: 18px;
   border: 1px solid #cfcece;
+}
+
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  cursor: pointer;
+}
+
+form input, form textarea, label input{
+  width: 40%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+
+label {
+  padding: 12px 20px 12px 0;
+  display: inline-block;
+  font-size: 15px;
+}
+
+.row{
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }

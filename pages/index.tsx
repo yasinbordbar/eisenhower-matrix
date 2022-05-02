@@ -7,29 +7,6 @@ import Quadrant from "../components/Quadrant";
 import AddTask from "../components/AddTask";
 
 const Home: NextPage = () => {
-  const tasks = useState<Task[]>([
-    {
-      id: 1,
-      title: "test",
-      status: TaskStatus.UrgentImportant,
-    },
-    {
-      id: 2,
-      title: "test",
-      status: TaskStatus.UrgentNotImportant,
-    },
-    {
-      id: 3,
-      title: "test",
-      status: TaskStatus.NotUrgentImportant,
-    },
-    {
-      id: 4,
-      title: "test",
-      status: TaskStatus.NotUrgentNotImportant,
-    },
-  ]);
-
   return (
     <div className={styles.container}>
       <Head>

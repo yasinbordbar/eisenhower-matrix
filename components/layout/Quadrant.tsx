@@ -1,7 +1,9 @@
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 import Link from "next/link";
 
-const Quadrant = ({ url, title, description, counter, counterColor }: any) => {
+const Quadrant = ({ type }: any) => {
+  const { url, title, description, counter, counterColor } = type;
+
   return (
     <div className={styles.center}>
       <Link href={`/tasks/${url}`}>

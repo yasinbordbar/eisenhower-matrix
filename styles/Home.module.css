@@ -6,11 +6,10 @@
   display: flex;
   justify-content: center;
   height: 44vh;
-
 }
 
-.row:first-child{
-  border-bottom: 1px dashed black;
+.row:not(:last-child){
+  border-bottom: 1px dashed black ;
 }
 
 
@@ -42,6 +41,7 @@
   padding: 20px  30px;
   font-size: 30px;
   color: white;
+  border-radius: 8px;
 }
 
 .description{

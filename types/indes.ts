@@ -10,3 +10,18 @@ export type Task = {
   title: string;
   status: TaskStatus;
 };
+
+export interface Values {
+  title: string;
+  description: string;
+  isImportant: boolean;
+  isUrgent: boolean;
+}
+
+// export interface IType {
+//   url: string;
+//   title: string;
+//   counter: number;
+//   counterColor: string;
+//   description: string;
+// }

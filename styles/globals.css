@@ -1,3 +1,4 @@
+
 .text-center{
   text-align: center;
 }
@@ -30,10 +31,9 @@ button{
 
 .btn {
   font-size: 1.5em;
-
   font-weight: bold;
-  border-radius: 50%;
-  background-color: #75a9ee;
+  border-radius: 9px;
+  background-color: #1b3253;
   margin: 10px;
   color: white;
   text-align: center;
@@ -101,4 +101,21 @@ label {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+}
+
+.row label{
+}
+
+.row input,textarea{
+}
+
+.btn-edit{
+  background-color: #29307d !important;
+  color: white !important;
+  border-radius: 4px !important;
+}
+.btn-delete{
+  background-color: #883a3a !important;
+  color: white !important;
+  border-radius: 4px !important;
 }

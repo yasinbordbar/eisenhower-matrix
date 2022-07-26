@@ -1,23 +1,41 @@
 import axios from "axios";
 import { Button, Checkbox, Form, Input } from "antd";
 
-const AddForm = ({ status, getTasks, setIsModalVisible }: any) => {
+const AddForm = ({ status, getTasks, setIsModalVisible, taskDetails }: any) => {
   const initialValues = {
-    title: "",
-    description: "",
+    title: taskDetails?.title || "",
+    description: taskDetails?.description || "",
     isImportant:
-      status === "not-urgent-important" || status === "urgent-important",
+      taskDetails?.isImportant ||
+      status === "not-urgent-important" ||
+      status === "urgent-important",
     isUrgent:
-      status === "urgent-important" || status === "urgent-not-important",
+      taskDetails?.isUrgent ||
+      status === "urgent-important" ||
+      status === "urgent-not-important",
   };
+
+  const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
     console.log("Success:", values);
-    axios.post("http://localhost:3000/tasks", values).then((res) => {
-      console.log(res);
-      getTasks();
-      setIsModalVisible(false);
-    });
+    if (taskDetails) {
+      axios
+        .put(`http://localhost:3000/tasks/update/${taskDetails.id}`, values)
+        .then((res) => {
+          console.log(res);
+          if (getTasks) getTasks();
+          setIsModalVisible(false);
+          form.resetFields();
+        });
+    } else {
+      axios.post("http://localhost:3000/tasks", values).then((res) => {
+        console.log(res);
+        if (getTasks) getTasks();
+        setIsModalVisible(false);
+        form.resetFields();
+      });
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -29,6 +47,7 @@ const AddForm = ({ status, getTasks, setIsModalVisible }: any) => {
   return (
     <>
       <Form
+        form={form}
         name="basic"
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 16 }}

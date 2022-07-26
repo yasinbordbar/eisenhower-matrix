@@ -1,20 +1,34 @@
 import styles from "../styles/Task.module.css";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Modal, Row } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { log } from "util";
+import React, { useState } from "react";
+import AddForm from "./add-task/AddForm";
 
-const Task = ({ title, id, getTasks }: any) => {
+const Task = ({ title, id, getTasks, status }: any) => {
   const handleDelete = () => {
     axios.delete(`http://localhost:3000/tasks/${id}`).then(() => getTasks());
   };
 
+  const [taskDetails, setTaskDetails] = useState<any>();
+
   const getDetails = () => {
-    //TODO: ADD TO SERVER
     axios
-      .get(`http://localhost:3000/tasks/${id}`)
-      .then((res) => console.log(res.data));
+      .get(`http://localhost:3000/tasks/id/${id}`)
+      .then((res) => setTaskDetails(res.data))
+      .then(() => showModal());
   };
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <div>
       <Row className={styles.taskTitle}>
@@ -32,6 +46,20 @@ const Task = ({ title, id, getTasks }: any) => {
           </Button>
         </Col>
       </Row>
+
+      <Modal
+        title="Edit Task"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <AddForm
+          setIsModalVisible={setIsModalVisible}
+          getTasks={getTasks}
+          status={status}
+          taskDetails={taskDetails}
+        />
+      </Modal>
     </div>
   );
 };

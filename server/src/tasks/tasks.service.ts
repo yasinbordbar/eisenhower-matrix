@@ -33,6 +33,11 @@ export class TasksService {
     );
   }
 
+  getTask(id: string): Task {
+    const found = this.tasks.find((task) => task.id === id);
+    return found;
+  }
+
   deleteTask(id: string): Task[] {
     this.tasks = this.tasks.filter((task) => task.id !== id);
     return this.tasks;
@@ -51,6 +56,25 @@ export class TasksService {
     };
 
     this.tasks.push(task);
+    return task;
+  }
+
+  updateTask(createTaskDto: CreateTaskDto, id: string): Task {
+    const objIndex = this.tasks.findIndex((obj) => obj.id === id);
+
+    const { title, description, isImportant, isUrgent } = createTaskDto;
+
+    const task: Task = {
+      id: uuid(),
+      title,
+      description,
+      isImportant,
+      isUrgent,
+      status: TaskStatus.OPEN,
+    };
+
+    this.tasks[objIndex] = task;
+
     return task;
   }
 }

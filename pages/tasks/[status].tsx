@@ -25,13 +25,13 @@ const Status = () => {
 
   const getTasks = () => {
     axios
-      .get(`http://localhost:3000/tasks/${status}`)
+      .get(`http://localhost:3000/tasks/type/${status}`)
       .then((res) => setTasks(res.data));
   };
 
   useEffect(() => {
     getTasks();
-  }, []);
+  }, [getTasks]);
 
   return (
     <div>

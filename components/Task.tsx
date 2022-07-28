@@ -3,23 +3,22 @@ import { Button, Col, Modal, Row } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 import React, { useState } from "react";
-import AddForm from "./add-task/AddForm";
+import CustomForm from "./add-task/CustomForm";
 
 const Task = ({ title, id, getTasks, status }: any) => {
+  const [taskDetails, setTaskDetails] = useState<any>();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const handleDelete = () => {
     axios.delete(`http://localhost:3000/tasks/${id}`).then(() => getTasks());
   };
 
-  const [taskDetails, setTaskDetails] = useState<any>();
-
-  const getDetails = () => {
+  const handleEdit = () => {
     axios
-      .get(`http://localhost:3000/tasks/id/${id}`)
+      .get(`http://localhost:3000/tasks/${id}`)
       .then((res) => setTaskDetails(res.data))
       .then(() => showModal());
   };
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -36,7 +35,7 @@ const Task = ({ title, id, getTasks, status }: any) => {
           <h1>{title} </h1>
         </Col>
         <Col span={2}>
-          <Button onClick={getDetails} className="btn-edit">
+          <Button onClick={handleEdit} className="btn-edit">
             <EditOutlined />
           </Button>
         </Col>
@@ -48,12 +47,13 @@ const Task = ({ title, id, getTasks, status }: any) => {
       </Row>
 
       <Modal
+        centered
         title="Edit Task"
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
       >
-        <AddForm
+        <CustomForm
           setIsModalVisible={setIsModalVisible}
           getTasks={getTasks}
           status={status}

@@ -1,45 +1,47 @@
 import axios from "axios";
 import { Button, Checkbox, Form, Input } from "antd";
 
-const AddForm = ({ status, getTasks, setIsModalVisible, taskDetails }: any) => {
-  const initialValues = {
-    title: taskDetails?.title || "",
-    description: taskDetails?.description || "",
-    isImportant:
-      taskDetails?.isImportant ||
-      status === "not-urgent-important" ||
-      status === "urgent-important",
-    isUrgent:
-      taskDetails?.isUrgent ||
-      status === "urgent-important" ||
-      status === "urgent-not-important",
-  };
+const CustomForm = ({
+  status,
+  getTasks,
+  setIsModalVisible,
+  taskDetails,
+}: any) => {
+  const EDIT_MODE = !!taskDetails;
+  const initialValues = EDIT_MODE
+    ? {
+        title: taskDetails.title,
+        description: taskDetails.description,
+        isImportant: taskDetails.isImportant,
+        isUrgent: taskDetails.isUrgent,
+      }
+    : {
+        title: "",
+        description: "",
+        isImportant:
+          status === "not-urgent-important" || status === "urgent-important",
+        isUrgent:
+          status === "urgent-important" || status === "urgent-not-important",
+      };
 
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
-    console.log("Success:", values);
-    if (taskDetails) {
+    if (EDIT_MODE) {
       axios
-        .put(`http://localhost:3000/tasks/update/${taskDetails.id}`, values)
-        .then((res) => {
-          console.log(res);
+        .patch(`http://localhost:3000/tasks/${taskDetails.id}`, values)
+        .then(() => {
           if (getTasks) getTasks();
           setIsModalVisible(false);
           form.resetFields();
         });
     } else {
-      axios.post("http://localhost:3000/tasks", values).then((res) => {
-        console.log(res);
+      axios.post("http://localhost:3000/tasks", values).then(() => {
         if (getTasks) getTasks();
         setIsModalVisible(false);
         form.resetFields();
       });
     }
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
   };
 
   const { TextArea } = Input;
@@ -53,7 +55,6 @@ const AddForm = ({ status, getTasks, setIsModalVisible, taskDetails }: any) => {
         wrapperCol={{ span: 16 }}
         initialValues={initialValues}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
         size="large"
       >
@@ -103,4 +104,4 @@ const AddForm = ({ status, getTasks, setIsModalVisible, taskDetails }: any) => {
   );
 };
 
-export default AddForm;
+export default CustomForm;

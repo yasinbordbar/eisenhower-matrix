@@ -2,17 +2,17 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
 import Task from "../../components/Task";
-import Index from "../../components/add-task";
 import axios from "axios";
-import useSWR, { useSWRConfig } from "swr";
 import AddButton from "../../components/add-task/AddButton";
 import { useEffect, useState } from "react";
+import CustomLoading from "../../components/CustomLoading";
 
 const Status = () => {
   const router = useRouter();
   const { status } = router.query;
 
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getTitle = () => {
     if (typeof status === "string") {
@@ -24,14 +24,16 @@ const Status = () => {
   };
 
   const getTasks = () => {
-    axios
-      .get(`http://localhost:3000/tasks/type/${status}`)
-      .then((res) => setTasks(res.data));
+    setLoading(true);
+    axios.get(`http://localhost:3000/tasks/type/${status}`).then((res) => {
+      setTasks(res.data);
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
     getTasks();
-  }, [getTasks]);
+  }, []);
 
   return (
     <div>
@@ -50,14 +52,18 @@ const Status = () => {
 
       <p className="text-center bold font-30">{getTitle()}</p>
 
-      {tasks?.map((task: any) => (
-        <Task
-          key={task.id}
-          title={task.title}
-          id={task.id}
-          getTasks={getTasks}
-        />
-      ))}
+      {loading ? (
+        <CustomLoading />
+      ) : (
+        tasks?.map((task: any) => (
+          <Task
+            key={task.id}
+            title={task.title}
+            id={task.id}
+            getTasks={getTasks}
+          />
+        ))
+      )}
     </div>
   );
 };

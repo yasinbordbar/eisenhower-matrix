@@ -4,47 +4,53 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { Task } from './task.model';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { Task } from '../schema/task.schema';
+import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private taskService: TasksService) {}
 
+  @Get(':taskId')
+  async getTask(@Param('taskId') taskId: string): Promise<Task> {
+    return this.taskService.getTaskById(taskId);
+  }
+
+  @Delete('/:taskId')
+  async deleteTask(@Param('taskId') taskId: string): Promise<Task[]> {
+    return this.taskService.deleteTask(taskId);
+  }
+
   @Get()
-  getAllTasks(): Task[] {
-    return this.taskService.getAllTasks();
+  async getTasks(): Promise<Task[]> {
+    return this.taskService.getTasks();
+  }
+
+  @Get('/counts/tasks')
+  async getNumberOfTasks(): Promise<any> {
+    return this.taskService.getNumberOfTasks();
   }
 
   @Get('/type/:type')
-  getTaskByStatus(@Param('type') type: string): Task[] {
+  async getTaskByStatus(@Param('type') type: string): Promise<Task[]> {
     return this.taskService.getTaskByType(type);
   }
 
-  @Get('/id/:id')
-  getTask(@Param('id') id: string): Task {
-    return this.taskService.getTask(id);
-  }
-
-  @Delete('/:id')
-  deleteTask(@Param('id') id: string): Task[] {
-    return this.taskService.deleteTask(id);
-  }
-
   @Post()
-  createTask(@Body() createTaskDto: CreateTaskDto): Task {
+  async createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
     return this.taskService.createTask(createTaskDto);
   }
 
-  @Put('/update/:id')
-  updateTask(
-    @Body() createTaskDto: CreateTaskDto,
-    @Param('id') id: string,
-  ): Task {
-    return this.taskService.updateTask(createTaskDto, id);
+  @Patch(':taskId')
+  async updateTask(
+    @Param('taskId') taskId: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+  ): Promise<Task> {
+    return this.taskService.updateTask(taskId, updateTaskDto);
   }
 }

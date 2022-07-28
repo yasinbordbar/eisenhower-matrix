@@ -1,8 +1,8 @@
 import styles from "../../styles/Home.module.css";
 import Link from "next/link";
 
-const Quadrant = ({ type }: any) => {
-  const { url, title, description, counter, counterColor } = type;
+const Quadrant = ({ type, count }: any) => {
+  const { url, title, description, counterColor } = type;
 
   return (
     <div className={styles.center}>
@@ -14,7 +14,7 @@ const Quadrant = ({ type }: any) => {
               style={{ background: counterColor }}
               className={styles.counter}
             >
-              {counter}
+              {count}
             </span>
           </p>
           <p className={styles.description}>{description}</p>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal } from "antd";
-import AddForm from "./AddForm";
+import CustomForm from "./CustomForm";
 
 const AddButton = ({ status, getTasks }: any) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -20,12 +20,13 @@ const AddButton = ({ status, getTasks }: any) => {
       </button>
 
       <Modal
+        centered
         title="Add Task"
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
       >
-        <AddForm
+        <CustomForm
           setIsModalVisible={setIsModalVisible}
           getTasks={getTasks}
           status={status}

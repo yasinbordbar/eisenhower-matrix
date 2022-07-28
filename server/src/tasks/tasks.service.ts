@@ -1,80 +1,70 @@
 import { Injectable } from '@nestjs/common';
-import { Task, TaskStatus } from './task.model';
 import { v4 as uuid } from 'uuid';
+import { TasksRepository } from './task.repository';
+import { Task } from '../schema/task.schema';
+import { UpdateTaskDto } from './dto/update-task.dto';
+import { TaskStatus } from './task.model';
 import { CreateTaskDto } from './dto/create-task.dto';
 
 @Injectable()
 export class TasksService {
-  private tasks: Task[] = [];
+  constructor(private readonly tasksRepository: TasksRepository) {}
 
-  getAllTasks() {
-    return this.tasks;
+  async getTaskById(taskId: string): Promise<Task> {
+    return this.tasksRepository.findOne({ id: taskId });
   }
 
-  // getTaskByStatus(status: TaskStatus) {
-  //   return this.tasks.filter(
-  //     (task) => task.status.toLowerCase() === status.toLowerCase(),
-  //   );
-  // }
+  async getTasks(): Promise<Task[]> {
+    return this.tasksRepository.find({});
+  }
 
-  getTaskByType(status: string) {
+  async getTaskByType(status: string) {
     const isImportant =
-      status === 'not-urgent-important' || status === 'urgent-important'
-        ? true
-        : false;
+      status === 'not-urgent-important' || status === 'urgent-important';
 
     const isUrgent =
-      status === 'urgent-important' || status === 'urgent-not-important'
-        ? true
-        : false;
+      status === 'urgent-important' || status === 'urgent-not-important';
 
-    return this.tasks.filter(
-      (task) => task.isImportant === isImportant && task.isUrgent === isUrgent,
-    );
+    return this.tasksRepository.find({
+      isImportant: isImportant,
+      isUrgent: isUrgent,
+    });
   }
 
-  getTask(id: string): Task {
-    const found = this.tasks.find((task) => task.id === id);
-    return found;
+  async getNumberOfTasks(): Promise<any> {
+    return {
+      urgentImportantCount: (await this.getTaskByType('urgent-important'))
+        .length,
+      notUrgentImportantCount: (
+        await this.getTaskByType('not-urgent-important')
+      ).length,
+      urgentNotImportantCount: (
+        await this.getTaskByType('urgent-not-important')
+      ).length,
+      notUrgentNotImportantCount: (
+        await this.getTaskByType('not-urgent-not-important')
+      ).length,
+    };
   }
 
-  deleteTask(id: string): Task[] {
-    this.tasks = this.tasks.filter((task) => task.id !== id);
-    return this.tasks;
+  async deleteTask(taskId: string): Promise<Task[]> {
+    return this.tasksRepository.deleteOne({ id: taskId });
   }
 
-  createTask(createTaskDto: CreateTaskDto): Task {
+  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     const { title, description, isImportant, isUrgent } = createTaskDto;
 
-    const task: Task = {
+    return this.tasksRepository.create({
       id: uuid(),
       title,
       description,
       isImportant,
       isUrgent,
       status: TaskStatus.OPEN,
-    };
-
-    this.tasks.push(task);
-    return task;
+    });
   }
 
-  updateTask(createTaskDto: CreateTaskDto, id: string): Task {
-    const objIndex = this.tasks.findIndex((obj) => obj.id === id);
-
-    const { title, description, isImportant, isUrgent } = createTaskDto;
-
-    const task: Task = {
-      id: uuid(),
-      title,
-      description,
-      isImportant,
-      isUrgent,
-      status: TaskStatus.OPEN,
-    };
-
-    this.tasks[objIndex] = task;
-
-    return task;
+  async updateTask(taskId: string, taskUpdates: UpdateTaskDto): Promise<Task> {
+    return this.tasksRepository.findOneAndUpdate({ id: taskId }, taskUpdates);
   }
 }

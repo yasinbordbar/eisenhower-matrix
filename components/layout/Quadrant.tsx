@@ -1,12 +1,13 @@
 import styles from "../../styles/Home.module.css";
 import Link from "next/link";
+import { IQuadrant } from "../../types";
 
-const Quadrant = ({ type, count }: any) => {
+const Quadrant = ({ type, count }: IQuadrant) => {
   const { url, title, description, counterColor } = type;
 
   return (
     <div className={styles.center}>
-      <Link href={`/tasks/${url}`}>
+      <Link passHref href={`/tasks/${url}`}>
         <div>
           <p className={styles.title}>{title}</p>
           <p className="text-center">

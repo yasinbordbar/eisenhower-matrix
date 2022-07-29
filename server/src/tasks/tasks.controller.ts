@@ -16,6 +16,11 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 export class TasksController {
   constructor(private taskService: TasksService) {}
 
+  @Get('/counts')
+  async getNumberOfTasks(): Promise<any> {
+    return this.taskService.getNumberOfTasks();
+  }
+
   @Get(':taskId')
   async getTask(@Param('taskId') taskId: string): Promise<Task> {
     return this.taskService.getTaskById(taskId);
@@ -29,11 +34,6 @@ export class TasksController {
   @Get()
   async getTasks(): Promise<Task[]> {
     return this.taskService.getTasks();
-  }
-
-  @Get('/counts/tasks')
-  async getNumberOfTasks(): Promise<any> {
-    return this.taskService.getNumberOfTasks();
   }
 
   @Get('/type/:type')

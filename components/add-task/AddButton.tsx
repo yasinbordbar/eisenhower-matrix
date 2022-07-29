@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Modal } from "antd";
 import CustomForm from "./CustomForm";
+import { IAddButton } from "../../types";
 
-const AddButton = ({ status, getTasks }: any) => {
+const AddButton = ({ status, getTasks }: IAddButton) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {

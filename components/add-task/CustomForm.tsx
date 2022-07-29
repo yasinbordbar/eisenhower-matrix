@@ -1,12 +1,18 @@
-import axios from "axios";
 import { Button, Checkbox, Form, Input } from "antd";
+import { ICustomForm, Task } from "../../types";
+import {
+  createTaskService,
+  updateTaskService,
+} from "../../services/Task.service";
 
 const CustomForm = ({
   status,
   getTasks,
   setIsModalVisible,
   taskDetails,
-}: any) => {
+}: ICustomForm) => {
+  const { TextArea } = Input;
+  const [form] = Form.useForm();
   const EDIT_MODE = !!taskDetails;
   const initialValues = EDIT_MODE
     ? {
@@ -24,27 +30,21 @@ const CustomForm = ({
           status === "urgent-important" || status === "urgent-not-important",
       };
 
-  const [form] = Form.useForm();
-
-  const onFinish = (values: any) => {
+  const onFinish = async (values: Task) => {
     if (EDIT_MODE) {
-      axios
-        .patch(`http://localhost:3000/tasks/${taskDetails.id}`, values)
-        .then(() => {
-          if (getTasks) getTasks();
-          setIsModalVisible(false);
-          form.resetFields();
-        });
+      await updateTaskService(taskDetails.id, values);
+      closeModalAndUpdate();
     } else {
-      axios.post("http://localhost:3000/tasks", values).then(() => {
-        if (getTasks) getTasks();
-        setIsModalVisible(false);
-        form.resetFields();
-      });
+      await createTaskService(values);
+      closeModalAndUpdate();
     }
   };
 
-  const { TextArea } = Input;
+  const closeModalAndUpdate = () => {
+    if (getTasks) getTasks();
+    setIsModalVisible(false);
+    form.resetFields();
+  };
 
   return (
     <>

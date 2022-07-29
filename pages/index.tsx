@@ -6,20 +6,19 @@ import { taskTypes } from "../utils/taskTypes";
 import CustomRow from "../components/layout/CustomRow";
 import AddButton from "../components/add-task/AddButton";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import CustomLoading from "../components/CustomLoading";
+import { getTasksCounterService } from "../services/Task.service";
 
 const Home: NextPage = () => {
   const [numberOfTasks, setNumberOfTasks] = useState<any>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getNumberOfTasks = () => {
+    const getNumberOfTasks = async () => {
       setLoading(true);
-      axios.get(`http://localhost:3000/tasks/counts/tasks`).then((r) => {
-        setNumberOfTasks(r.data);
-        setLoading(false);
-      });
+      const { data } = await getTasksCounterService();
+      setNumberOfTasks(data);
+      setLoading(false);
     };
 
     getNumberOfTasks();

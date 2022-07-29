@@ -2,17 +2,27 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
 import Task from "../../components/Task";
-import axios from "axios";
 import AddButton from "../../components/add-task/AddButton";
 import { useEffect, useState } from "react";
 import CustomLoading from "../../components/CustomLoading";
+import { getTasksByStatusService } from "../../services/Task.service";
 
 const Status = () => {
   const router = useRouter();
   const { status } = router.query;
-
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const getTasks = async () => {
+    setLoading(true);
+    const { data } = await getTasksByStatusService(status);
+    setTasks(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getTasks();
+  }, []);
 
   const getTitle = () => {
     if (typeof status === "string") {
@@ -23,29 +33,17 @@ const Status = () => {
     }
   };
 
-  const getTasks = () => {
-    setLoading(true);
-    axios.get(`http://localhost:3000/tasks/type/${status}`).then((res) => {
-      setTasks(res.data);
-      setLoading(false);
-    });
-  };
-
-  useEffect(() => {
-    getTasks();
-  }, []);
-
   return (
     <div>
       <Head>
         <title>{status} tasks</title>
         <meta name="description" content={`${status} tasks`} />
-        <link rel="icon" href="/favicon.ico" />
+        {/*<link rel="icon" href="/favicon.ico" />*/}
       </Head>
       <AddButton getTasks={getTasks} status={status} />
 
       <div className="text-center">
-        <Link href="/">
+        <Link passHref href="/">
           <button>Back</button>
         </Link>
       </div>

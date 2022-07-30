@@ -13,14 +13,14 @@ const Home: NextPage = () => {
   const [numberOfTasks, setNumberOfTasks] = useState<any>({});
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const getNumberOfTasks = async () => {
-      setLoading(true);
-      const { data } = await getTasksCounterService();
-      setNumberOfTasks(data);
-      setLoading(false);
-    };
+  const getNumberOfTasks = async () => {
+    setLoading(true);
+    const { data } = await getTasksCounterService();
+    setNumberOfTasks(data);
+    setLoading(false);
+  };
 
+  useEffect(() => {
     getNumberOfTasks();
   }, []);
 
@@ -33,8 +33,7 @@ const Home: NextPage = () => {
         <CustomLoading />
       ) : (
         <>
-          {" "}
-          <AddButton />
+          <AddButton getNumberOfTasks={getNumberOfTasks} />
           <CustomRow>
             <Quadrant
               type={taskTypes.urgentImportant}

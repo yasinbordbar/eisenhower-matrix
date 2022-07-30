@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Modal } from "antd";
 import CustomForm from "./CustomForm";
-import { IAddButton } from "../../types";
+import { IAddButtonProps } from "../../interfaces/props.interface";
 
-const AddButton = ({ status, getTasks }: IAddButton) => {
+const AddButton = ({ status, getTasks, getNumberOfTasks }: IAddButtonProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -31,6 +31,7 @@ const AddButton = ({ status, getTasks }: IAddButton) => {
           setIsModalVisible={setIsModalVisible}
           getTasks={getTasks}
           status={status}
+          getNumberOfTasks={getNumberOfTasks}
         />
       </Modal>
     </div>

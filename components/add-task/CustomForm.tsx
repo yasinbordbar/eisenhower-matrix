@@ -1,19 +1,22 @@
 import { Button, Checkbox, Form, Input } from "antd";
-import { ICustomForm, Task } from "../../types";
 import {
   createTaskService,
   updateTaskService,
 } from "../../services/Task.service";
+import { ICustomFormProps } from "../../interfaces/props.interface";
+import { ITask } from "../../interfaces";
 
 const CustomForm = ({
   status,
   getTasks,
   setIsModalVisible,
   taskDetails,
-}: ICustomForm) => {
+  getNumberOfTasks,
+}: ICustomFormProps) => {
   const { TextArea } = Input;
   const [form] = Form.useForm();
   const EDIT_MODE = !!taskDetails;
+  const HOME_PAGE_MODE = !!getNumberOfTasks;
   const initialValues = EDIT_MODE
     ? {
         title: taskDetails.title,
@@ -30,13 +33,14 @@ const CustomForm = ({
           status === "urgent-important" || status === "urgent-not-important",
       };
 
-  const onFinish = async (values: Task) => {
+  const onFinish = async (values: ITask) => {
     if (EDIT_MODE) {
       await updateTaskService(taskDetails.id, values);
       closeModalAndUpdate();
     } else {
       await createTaskService(values);
       closeModalAndUpdate();
+      if (HOME_PAGE_MODE) getNumberOfTasks();
     }
   };
 

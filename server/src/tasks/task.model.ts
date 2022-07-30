@@ -7,6 +7,13 @@ export interface Task {
   status: TaskStatus;
 }
 
+export interface TasksCount {
+  urgentImportantCount: number;
+  notUrgentImportantCount: number;
+  urgentNotImportantCount: number;
+  notUrgentNotImportantCount: number;
+}
+
 export enum TaskStatus {
   OPEN = 'OPEN',
   IN_PROGRESS = ' IN_PROGRESS',

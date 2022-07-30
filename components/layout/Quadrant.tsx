@@ -1,8 +1,8 @@
 import styles from "../../styles/Home.module.css";
 import Link from "next/link";
-import { IQuadrant } from "../../types";
+import { IQuadrantProps } from "../../interfaces/props.interface";
 
-const Quadrant = ({ type, count }: IQuadrant) => {
+const Quadrant = ({ type, count }: IQuadrantProps) => {
   const { url, title, description, counterColor } = type;
 
   return (

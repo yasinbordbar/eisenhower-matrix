@@ -1,7 +1,12 @@
-.taskTitle{
+.task{
     border: 1px solid silver;
     padding: 15px 20px;
-    margin: 20px 500px;
+    margin: 20px 20%;
     border-radius: 8px;
+}
 
+@media only screen and (max-width: 768px) {
+    .task{
+        margin: 20px 1rem;
+    }
 }

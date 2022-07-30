@@ -11,13 +11,14 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from '../schema/task.schema';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { TasksCount } from './task.model';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private taskService: TasksService) {}
 
   @Get('/counts')
-  async getNumberOfTasks(): Promise<any> {
+  async getNumberOfTasks(): Promise<TasksCount> {
     return this.taskService.getNumberOfTasks();
   }
 

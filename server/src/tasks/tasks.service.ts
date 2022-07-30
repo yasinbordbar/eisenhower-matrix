@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { TasksRepository } from './task.repository';
 import { Task } from '../schema/task.schema';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { TaskStatus } from './task.model';
+import { TasksCount, TaskStatus } from './task.model';
 import { CreateTaskDto } from './dto/create-task.dto';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class TasksService {
     });
   }
 
-  async getNumberOfTasks(): Promise<any> {
+  async getNumberOfTasks(): Promise<TasksCount> {
     return {
       urgentImportantCount: (await this.getTaskByType('urgent-important'))
         .length,

@@ -3,14 +3,15 @@ import { Button, Col, Modal, Row } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import CustomForm from "./add-task/CustomForm";
-import { ITask } from "../types";
 import {
   deleteTaskService,
   getTaskByIdService,
 } from "../services/Task.service";
+import { ITaskProps } from "../interfaces/props.interface";
+import { ITask } from "../interfaces";
 
-const Task = ({ title, id, getTasks, status }: ITask) => {
-  const [taskDetails, setTaskDetails] = useState<any>();
+const Task = ({ title, id, getTasks, status }: ITaskProps) => {
+  const [taskDetails, setTaskDetails] = useState<ITask>();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleDelete = async () => {
@@ -34,7 +35,7 @@ const Task = ({ title, id, getTasks, status }: ITask) => {
 
   return (
     <div>
-      <Row className={styles.taskTitle}>
+      <Row className={styles.task}>
         <Col span={20}>
           <h1>{title} </h1>
         </Col>

@@ -1,16 +1,17 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
-import Task from "../../components/Task";
 import AddButton from "../../components/add-task/AddButton";
 import { useEffect, useState } from "react";
 import CustomLoading from "../../components/CustomLoading";
 import { getTasksByStatusService } from "../../services/Task.service";
+import Task from "../../components/Task";
+import { ITask } from "../../interfaces";
 
 const Status = () => {
   const router = useRouter();
   const { status } = router.query;
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<ITask[]>([]);
   const [loading, setLoading] = useState(true);
 
   const getTasks = async () => {
@@ -21,8 +22,8 @@ const Status = () => {
   };
 
   useEffect(() => {
-    getTasks();
-  }, []);
+    if (status) getTasks();
+  }, [status]);
 
   const getTitle = () => {
     if (typeof status === "string") {
